@@ -1,4 +1,5 @@
-from datetime import datetime, timezone
+from datetime import UTC, datetime
+
 from services.firestore_client import get_firestore_client
 
 db = get_firestore_client()
@@ -8,7 +9,7 @@ class CommentModel:
     def __init__(self, author, body):
         self.author = author
         self.body = body
-        self.creation_date = datetime.now(timezone.utc)
+        self.creation_date = datetime.now(UTC)
 
     def add_to_post(self, post_id):
         post_ref = db.collection("posts").document(post_id)

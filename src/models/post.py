@@ -1,4 +1,5 @@
-from datetime import datetime, timezone
+from datetime import UTC, datetime
+
 from services.firestore_client import get_firestore_client
 
 db = get_firestore_client()
@@ -11,7 +12,7 @@ class PostModel:
         self.author = author
         self.subject = subject
         self.body = body
-        self.creation_date = datetime.now(timezone.utc)
+        self.creation_date = datetime.now(UTC)
         self.change_date = self.creation_date
 
     def create(self):
@@ -53,7 +54,7 @@ class PostModel:
         updated_data = {
             "subject": subject,
             "body": body,
-            "change_date": datetime.now(timezone.utc),
+            "change_date": datetime.now(UTC),
         }
         doc_ref.update(updated_data)
         updated_post = doc_ref.get().to_dict()
