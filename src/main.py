@@ -1,6 +1,14 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from src.models.post import PostModel
+from models.post import PostModel
+from models.comment import CommentModel
+import firebase_admin
+from firebase_admin import credentials, auth
+
+# Initialize once
+if not firebase_admin._apps:
+    cred = credentials.ApplicationDefault()
+    firebase_admin.initialize_app(cred)
 
 app = Flask(__name__)
 CORS(app)
@@ -47,6 +55,23 @@ def update_post(post_id):
         return jsonify({'error': error}), status_code
 
     return jsonify({'message': 'Post updated successfully', 'post': PostModel.to_dict(updated_post)}), 200
+
+@app.route("/posts/<post_id>/comments", methods=["POST"])
+def add_comment(post_id):
+    data = request.json or {}
+    author = data.get("author")
+    body = data.get("body")
+    if not author or not body:
+        return jsonify({"error": "Missing author or body"}), 400
+
+    comment = CommentModel(author, body)
+    comment_id = comment.add_to_post(post_id)
+    return jsonify({"comment_id": comment_id}), 201
+
+@app.route("/posts/<post_id>/comments", methods=["GET"])
+def get_comments(post_id):
+    comments = CommentModel.get_for_post(post_id)
+    return jsonify(comments), 200
 
 if __name__ == "__main__":
     app.run(debug=True)
