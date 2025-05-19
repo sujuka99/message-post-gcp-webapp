@@ -1,7 +1,7 @@
-from google.cloud import firestore
 from datetime import datetime, timezone
+from services.firestore_client import get_firestore_client
 
-db = firestore.Client()
+db = get_firestore_client()
 
 class PostModel:
 
