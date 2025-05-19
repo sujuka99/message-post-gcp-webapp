@@ -3,8 +3,8 @@ from services.firestore_client import get_firestore_client
 
 db = get_firestore_client()
 
-class CommentModel:
 
+class CommentModel:
     def __init__(self, author, body):
         self.author = author
         self.body = body
@@ -15,7 +15,7 @@ class CommentModel:
         comment_data = {
             "author": self.author,
             "body": self.body,
-            "creation_date": self.creation_date
+            "creation_date": self.creation_date,
         }
         comment_ref = post_ref.collection("comments").document()
         comment_ref.set(comment_data)
@@ -25,10 +25,4 @@ class CommentModel:
     def get_for_post(post_id):
         post_ref = db.collection("posts").document(post_id)
         comments = post_ref.collection("comments").order_by("creation_date").stream()
-        return [
-            {
-                "id": comment.id,
-                **comment.to_dict()
-            }
-            for comment in comments
-        ]
+        return [{"id": comment.id, **comment.to_dict()} for comment in comments]

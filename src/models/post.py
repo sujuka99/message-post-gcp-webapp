@@ -3,8 +3,8 @@ from services.firestore_client import get_firestore_client
 
 db = get_firestore_client()
 
-class PostModel:
 
+class PostModel:
     collection_name = "posts"
 
     def __init__(self, author, subject, body):
@@ -39,10 +39,7 @@ class PostModel:
     @staticmethod
     def get_all():
         docs = db.collection(PostModel.collection_name).stream()
-        return [
-            {"id": doc.id, **doc.to_dict()}
-            for doc in docs
-        ]
+        return [{"id": doc.id, **doc.to_dict()} for doc in docs]
 
     @staticmethod
     def update(post_id, user_email, subject, body):
