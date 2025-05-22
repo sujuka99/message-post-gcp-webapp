@@ -1,5 +1,7 @@
 # Simple App Engine App
 
+## Random troubleshooting
+
 - Login: `gcloud auth login`
 - Select project: `gcloud config set project message-post-gcp-webapp`
 - Create a Firestore (native mode) database in the project. CHOOSE THE REGION WISELY
@@ -12,13 +14,17 @@
 
 ## Test backend
 
+#### Start app
+
+`PYTHONPATH=$(pwd)/src flask --app src.main run`
+
 #### Create sample post
 
 ```
-curl -X POST "https://message-post-gcp-webapp.appspot.com/posts" \
+curl -X POST "http://127.0.0.1:5000/posts" \
   -H "Content-Type: application/json" \
   -d '{
-        "author": "testuser@example.com",
+        "author_email": "testuser@example.com",
         "subject": "Hello World",
         "body": "This is a test post."
       }'
@@ -27,16 +33,16 @@ curl -X POST "https://message-post-gcp-webapp.appspot.com/posts" \
 #### Get all posts
 
 ```
-curl -X GET "https://message-post-gcp-webapp.appspot.com/posts"
+curl -X GET "http://127.0.0.1:5000/posts"
 ```
 
 #### Update post
 
 ```
-curl -X PUT "https://message-post-gcp-webapp.appspot.com/posts/<post_id>" \
+curl -X PUT "http://127.0.0.1:5000/posts/<post_id>" \
   -H "Content-Type: application/json" \
   -d '{
-        "author": "testuser@example.com",
+        "author_email": "testuser@example.com",
         "subject": "Updated Subject",
         "body": "This is an updated test post."
       }'
@@ -45,10 +51,10 @@ curl -X PUT "https://message-post-gcp-webapp.appspot.com/posts/<post_id>" \
 #### Add coment
 
 ```
-curl -X POST "https://message-post-gcp-webapp.appspot.com/posts/<post_id>/comments" \
+curl -X POST "http://127.0.0.1:5000/posts/<post_id>/comments" \
   -H "Content-Type: application/json" \
   -d '{
-        "author": "commenter@example.com",
+        "author_email": "commenter@example.com",
         "body": "This is a test comment."
       }'
 ```
@@ -56,6 +62,5 @@ curl -X POST "https://message-post-gcp-webapp.appspot.com/posts/<post_id>/commen
 #### Get comments
 
 ```
-curl -X GET "https://message-post-gcp-webapp.appspot.com/posts/<post_id>/comments"
+curl -X GET "http://127.0.0.1:5000/posts/<post_id>/comments"
 ```
-
